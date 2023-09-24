@@ -6,21 +6,41 @@ const logoutVisible = ref(false);
 </script>
 
 <template>
-    <div class="flex justify-between">
+    <div class="flex justify-between p-4 shadow-md">
         <h1 class="text-lg font-bold">Dominik Raducki</h1>
         <div class="flex gap-4 items-center justify-center">
             <div class="relative">
                 <button @click="notificationsVisible = !notificationsVisible">
-                    <Icon size="24px" name="ri:notification-2-line" />
+                    <Icon size="24px" name="solar:bell-line-duotone" />
                 </button>
                 <div v-if="notificationsVisible"
-                    class="absolute top-full right-0 shadow-md p-3 bg-white">
-                    Notifications
+                    class="absolute top-full right-0 shadow-md p-4 bg-white min-w-fit">
+                    <div class="flex gap-8 flex-col">
+                        <div class="flex gap-16 items-center">
+                            <h3 class="font-bold">Notifications</h3>
+                        <button
+                            class="text-blue-400 text-sm w-52 hover:text-blue-500">
+                            Oznacz jako przeczytane
+                        </button>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-400 flex items-center justify-center">
+                                <Icon class="text-white" name="solar:chat-line-linear" size="24px"/>
+                            </div>
+                            <div class="flex flex-col">
+                                <h4 class="font-bold">Nowa wiadomość</h4>
+                                <p class="font-light">Lorem ipsum dolor sit amet.</p>
+                                <p class="font-light text-sm">5 mins ago.</p>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="relative">
                 <button @click="logoutVisible = !logoutVisible">
-                    <Icon size="24px" name="ri:account-circle-line" />
+                    <Icon size="24px" name="solar:user-rounded-linear" />
                 </button>
                 <div v-if="logoutVisible"
                     class="absolute top-full right-0 shadow-md p-3 bg-white">
