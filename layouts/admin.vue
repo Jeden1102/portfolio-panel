@@ -1,7 +1,7 @@
 <template>
     <div class="flex">
         <Sidebar />
-        <div class="flex flex-col">
+        <div class="flex flex-col w-full px-8 py-4">
             <Navbar />
             <slot></slot>
         </div>
