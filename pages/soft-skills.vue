@@ -1,13 +1,12 @@
-<template>
-    <div>
-        Soft skills
-    </div>
-</template>
-
 <script setup lang="ts">
-
+import { ref } from "vue";
+import { NDynamicTags } from "naive-ui";
+const tags = ref([]);
 </script>
 
-<style scoped>
-
-</style>
+<template>
+  <div>
+    <label class="block my-2 text-lg" for="">Umiejętności miękkie</label>
+    <n-dynamic-tags v-model:value="tags" />
+  </div>
+</template>
