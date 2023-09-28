@@ -17,8 +17,12 @@ const values: Ref<ValuesInterface> = ref({});
   <div>
     <div class="w-96">
       <n-tabs type="segment">
-        <n-tab-pane v-for="(value, key) in languages" :name="value" :tab="key">
-          {{ value }}
+        <n-tab-pane
+          v-for="(value, key) in languages"
+          :name="value"
+          :tab="key"
+          display-directive="show"
+        >
           <n-space vertical v-for="(fieldValue, fieldKey) in fields">
             <n-input
               autosize

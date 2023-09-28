@@ -1,63 +1,39 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { NSpace, NInput, NButton } from "naive-ui";
-function save() {
-  console.log("ok");
-}
-const activeTab = ref(0);
-const heading = ref("");
-const description = ref("");
-const headingEN = ref("");
-const descriptionEN = ref("");
+import { NSpace, NInput, NTabs, NTabPane } from "naive-ui";
+import { ValuesInterface } from "../interface/interface";
+const languages = {
+  pl: "Polski",
+  en: "Angielski",
+};
+const fields = {
+  heading: "text",
+  description: "textarea",
+};
+const values: Ref<ValuesInterface> = ref({});
 </script>
 <template>
   <div>
     <div class="w-96">
-      <div class="flex gap-2 my-4">
-        <button
-          class="bg-blue-400 text-white p-2 rounded-sm px-4 hover:bg-blue-500"
-          :class="{ 'bg-blue-600': activeTab === 0 }"
-          @click="activeTab = 0"
+      <n-tabs type="segment">
+        <n-tab-pane
+          v-for="(value, key) in languages"
+          :name="value"
+          :tab="key"
+          display-directive="show"
         >
-          Polish
-        </button>
-        <button
-          class="bg-blue-400 text-white p-2 rounded-sm px-4 hover:bg-blue-500"
-          :class="{ 'bg-blue-600': activeTab === 1 }"
-          @click="activeTab = 1"
-        >
-          English
-        </button>
-      </div>
-      <n-space vertical v-if="activeTab === 0">
-        <n-input
-          autosize
-          class="w-72"
-          v-model:value="headingEN"
-          type="text"
-          placeholder="Hello, Im Johny"
-        />
-        <n-input
-          v-model:value="descriptionEN"
-          type="textarea"
-          placeholder="I'am a programmer..."
-        />
-      </n-space>
-      <n-space vertical v-else>
-        <n-input
-          autosize
-          class="w-72"
-          v-model:value="heading"
-          type="text"
-          placeholder="Cześć, jestem Janek"
-        />
-        <n-input
-          v-model:value="description"
-          type="textarea"
-          placeholder="Jestem programistą..."
-        />
-      </n-space>
+          <n-space vertical v-for="(fieldValue, fieldKey) in fields">
+            <n-input
+              autosize
+              class="w-72 my-1"
+              :type="fieldValue"
+              :placeholder="fieldKey"
+              @change="(val) => (values[`${fieldKey}_${key}`] = val)"
+            />
+          </n-space>
+        </n-tab-pane>
+      </n-tabs>
     </div>
   </div>
 </template>
