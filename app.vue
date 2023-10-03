@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout name="admin">
-    <NuxtPage class="p-4 rounded-md shadow-md"/>
+    <NuxtPage class="p-4 rounded-md shadow-md" />
   </NuxtLayout>
 </template>
 <style>

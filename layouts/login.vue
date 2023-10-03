@@ -1,14 +1,11 @@
 <template>
-    <div>
-        Only login
-        <slot></slot>
-    </div>
+  <div>
+    <slot></slot>
+  </div>
 </template>
 
 <script setup lang="ts">
-
 </script>
 
 <style scoped>
-
 </style>
