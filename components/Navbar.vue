@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { NAvatar, NButton } from 'naive-ui';
 const notificationsVisible = ref(false);
 const logoutVisible = ref(false);
+
+const { auth } = useSupabaseClient()
+
+
+const logOut = async () => {
+  auth.signOut()
+  console.log("TERAZ")
+  logoutVisible.value = false;
+}
 </script>
 
 <template>
@@ -42,10 +50,10 @@ const logoutVisible = ref(false);
                 <button @click="logoutVisible = !logoutVisible">
                     <Icon size="24px" name="solar:user-rounded-linear" />
                 </button>
-                <div v-if="logoutVisible"
+                <button v-if="logoutVisible" @click="logOut"
                     class="absolute top-full right-0 shadow-md p-3 bg-white">
                     Logout
-                </div>
+                </button>
             </div>
         </div>
     </div>

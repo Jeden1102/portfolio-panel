@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="admin">
+  <NuxtLayout>
     <NuxtPage class="p-4 rounded-md shadow-md" />
   </NuxtLayout>
 </template>
@@ -16,3 +16,18 @@
   transform: translateX(-50px);
 }
 </style>
+<script setup>
+const user = useSupabaseUser()
+const route = useRoute()
+
+watchEffect(() => {
+  if (user.value) {
+    setPageLayout('admin')
+  } else {
+    setPageLayout('login')
+    if (route.path !== '/login') {
+      navigateTo('/login')
+    }
+  }
+})
+</script>

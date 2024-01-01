@@ -9,7 +9,11 @@
 </template>
 
 <script setup lang="ts">
-
+const user = useSupabaseUser()
+const route = useRoute()
+if (!user.value) {
+    if (route.path !== '/login') {
+        navigateTo('/login')
+    }
+}
 </script>
-
-<style scoped></style>
