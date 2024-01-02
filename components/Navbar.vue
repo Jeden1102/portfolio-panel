@@ -8,7 +8,6 @@ const { auth } = useSupabaseClient()
 
 const logOut = async () => {
   auth.signOut()
-  console.log("TERAZ")
   logoutVisible.value = false;
 }
 </script>
