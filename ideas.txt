@@ -1,0 +1,3 @@
+GRUPY UMIEJETNOSC - FIELDS : {string, string_en}, eg. :FRONT/BACK/PROJEKTY
+UMIEJETNOSC - FIELDS :{IKONA/RATING/OPIS},eg.: icon.svg, 5, lorem ipsum
+PROJEKT - FIELDS: {nazwa, link gh, link live, desc, ref. do umiejtnosci}
