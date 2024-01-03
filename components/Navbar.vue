@@ -20,8 +20,10 @@ const logOut = async () => {
                 <button @click="notificationsVisible = !notificationsVisible">
                     <Icon size="24px" name="solar:bell-line-duotone" />
                 </button>
-                <div v-if="notificationsVisible"
-                    class="absolute top-full right-0 shadow-md p-4 bg-white min-w-fit">
+                <div
+                    class="absolute top-full right-0 shadow-md p-4 bg-white min-w-fit z-10  transition-all"
+                    :class="{'opacity-1 translate-y-0 pointer-events-auto' : notificationsVisible, 'opacity-0 -translate-y-2 pointer-events-none': !notificationsVisible}"
+                    >
                     <div class="flex gap-8 flex-col">
                         <div class="flex gap-16 items-center">
                             <h3 class="font-bold">Notifications</h3>
@@ -50,7 +52,8 @@ const logOut = async () => {
                     <Icon size="24px" name="solar:user-rounded-linear" />
                 </button>
                 <button v-if="logoutVisible" @click="logOut"
-                    class="absolute top-full right-0 shadow-md p-3 bg-white">
+                    class="absolute top-full right-0 shadow-md p-3 bg-white flex items-center gap-2">
+                    <Icon name="material-symbols:logout-sharp"/>
                     Logout
                 </button>
             </div>
