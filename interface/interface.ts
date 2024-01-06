@@ -7,3 +7,12 @@ export interface SkillInterface {
     value: string;
     id: number;
 }
+
+export interface GroupSkillInterface {
+    id?: number;
+    name?: string;
+    description?: string;
+    rating?: string;
+    file?: string;
+    isEditing: boolean;
+}
