@@ -1,2 +1,1 @@
-UMIEJETNOSC - FIELDS :{IKONA/RATING/OPIS},eg.: icon.svg, 5, lorem ipsum
-PROJEKT - FIELDS: {nazwa, link gh, link live, desc, ref. do umiejtnosci}
+PROJEKT - FIELDS: {ref. do umiejtnosci}

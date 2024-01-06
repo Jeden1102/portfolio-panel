@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { createClient } from "@supabase/supabase-js";
-import { GroupSkillInterface } from "../interface/interface";
+import { GroupSkillInterface, FileInterface } from "../interface/interface";
 
 const props = defineProps(["tableName", "fields"]);
 
@@ -11,79 +11,104 @@ const supabase = createClient(
     runtimeConfig.public.supabase.key
 );
 
-// const getRandomIntInclusive = (min: number, max: number) => {
-//     min = Math.ceil(min);
-//     max = Math.floor(max);
-//     return Math.floor(Math.random() * (max - min + 1) + min);
-// }
-
-// const removeValue = async (id: number) => {
-//     const { error } = await supabase
-//         .from(props.tableName)
-//         .delete()
-//         .eq('id', skills.value[id].id)
-// }
-
-// const setNewValues = async () => {
-//     skills.value.forEach(async skill => {
-//         const { data, error } = await supabase
-//             .from(props.tableName)
-//             .upsert({ id: skill.id ? skill.id : getRandomIntInclusive(100, 999999), [props.tableKey]: skill.key, [props.tableValue]: skill.value })
-//             .select();
-//     })
-// }
-
-// const getDbValues = async () => {
-//     const values: SkillInterface[] = [];
-//     const { data, error } = await supabase
-//         .from(props.tableName)
-//         .select()
-
-//     if (data) {
-//         data.forEach((skill) => {
-//             console.log(skill, props.tableKey)
-//             values.push({
-//                 key: skill[props.tableKey],
-//                 value: skill[props.tableValue],
-//                 id: skill.id
-//             })
-//         })
-//         skills.value = values;
-//     }
-// }
-// onMounted(() => {
-//     getDbValues();
-// });
-// HERE fields in format {tableKey:'desc', type :'text', ....}
-// Loop trough fields.
 const skills = ref<Array<GroupSkillInterface>>([]);
+const files = ref<Array<FileInterface>>([]);
+
+const getDbValues = async () => {
+    const values: GroupSkillInterface[] = [];
+    const _files: FileInterface[] = [];
+    const { data, error } = await supabase.from(props.tableName).select();
+
+    if (data) {
+        data.forEach((skill) => {
+            values.push({
+                ...skill,
+                isEditing: false,
+            });
+            _files.push({
+                file: null,
+                uri: skill.file,
+                id: skill.id,
+                isFromDb: true,
+            });
+        });
+        skills.value = values;
+        files.value = _files;
+    }
+};
+onMounted(() => {
+    getDbValues();
+});
 
 const addSkill = () => {
-    skills.value.push({ isEditing: true });
+    skills.value.push({ isEditing: true, id: Date.now() });
 };
-const removeSkill = (key: number) => {
-    console.log(key);
+const removeSkill = async (key: number, id: number) => {
     skills.value.splice(key, 1);
+    const { error } = await supabase
+        .from(props.tableName)
+        .delete()
+        .eq("id", id);
 };
 
-const cancelSkill = (key: number) => {
+const saveSkill = async (key: number, id: number) => {
     skills.value[key].isEditing = false;
+    const skill = skills.value.filter((skill) => skill.id === id)[0];
+    if (!skill) return;
+    delete skill.isEditing;
+    const { data, error } = await supabase
+        .from(props.tableName)
+        .upsert({ ...skill })
+        .select();
+    if (!data) return;
+    saveFillToDb(id);
 };
 
-const saveSkill = (key: number) => {
-    skills.value[key].isEditing = false;
-};
-const testFile = ref(null);
-const setFile = async (ev) => {
-    console.log(testFile.value);
-
-    const avatarFile = ev.target.files[0];
+const saveFillToDb = async (id: number) => {
+    const file = files.value.filter((file) => file.id === id)[0];
+    if (!file || !file.file) return;
     const { data, error } = await supabase.storage
         .from("skills")
-        .upload("public/avatar1.png", avatarFile, {
+        .upload(`public/${file.file.name}`, file.file, {
             cacheControl: "3600",
-            upsert: false,
+            upsert: true,
         });
+    if (!data) return;
+    await supabase
+        .from(props.tableName)
+        .upsert({ id, file: data.path })
+        .select();
+};
+
+const setFile = async (ev, id: number) => {
+    const file = ev.target.files[0];
+    const foundFile = files.value.find((obj) => obj.id === id);
+    if (foundFile) {
+        foundFile.uri = URL.createObjectURL(file);
+        foundFile.file = file;
+        foundFile.isFromDb = false;
+        return;
+    }
+    files.value.push({
+        file,
+        uri: URL.createObjectURL(file),
+        id,
+        isFromDb: false,
+    });
+};
+
+const removeFile = (id: number) => {
+    files.value = files.value.filter((file) => file.id !== id);
+};
+
+const getFileUri = (id: number) => {
+    if (files.value.length === 0) return;
+    const file = files.value.filter((file) => file.id === id)[0];
+    if (!file) return;
+    if (file.isFromDb && !file.uri) return;
+    return file.isFromDb
+        ? `${runtimeConfig.public.supabase.url}/storage/v1/object/public/skills/${file.uri}`
+        : file.uri;
 };
 </script>
 
@@ -93,35 +118,55 @@ const setFile = async (ev) => {
             <div
                 class="p-4 pt-8 rounded-md shadow-md border border-gray-300 relative"
                 v-for="(skill, key) in skills"
-                :key="key"
+                :key="skill.id"
             >
                 <button
-                    @click="removeSkill(key)"
+                    @click="removeSkill(key, skill.id)"
                     class="btn-error absolute right-2 top-2"
                 >
                     <Icon name="ic:baseline-delete" />
                 </button>
-                <div v-if="skill.isEditing">
+                <div>
                     <div v-for="field in fields" class="field">
                         <label class="font-bold my-2 block">{{
                             field.label
                         }}</label>
                         <textarea
                             v-if="field.fieldType === 'text'"
-                            class="w-full border border-gray-300"
+                            class="w-full border border-gray-300 disabled:bg-gray-300 disabled:cursor-not-allowed"
                             cols="30"
                             v-model="skill[field.tableKey]"
+                            :disabled="!skill.isEditing"
                         ></textarea>
-                        <input
-                            v-if="field.fieldType === 'file'"
-                            @change="setFile"
-                            type="file"
-                            name=""
-                            id=""
-                        />
+                        <div v-if="field.fieldType === 'file'">
+                            <input
+                                @change="setFile($event, skill.id)"
+                                type="file"
+                                :disabled="!skill.isEditing"
+                            />
+                            <div
+                                class="relative w-24 h-24 my-2 group"
+                                v-if="getFileUri(skill.id)"
+                            >
+                                <img
+                                    class="w-full h-full"
+                                    :src="getFileUri(skill.id)"
+                                    alt="Icon preview"
+                                />
+                                <button
+                                    @click="removeFile(skill.id)"
+                                    class="absolute transition-all left-0 top-0 w-full h-full bg-red-300 bg-opacity-50 border border-red-500 text-red-700 text-3xl hidden group-hover:block"
+                                >
+                                    <Icon name="ic:baseline-delete" />
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex gap-2 mt-4">
-                        <button @click="saveSkill(key)" class="btn-primary">
+                    <div class="flex gap-2 mt-4" v-if="skill.isEditing">
+                        <button
+                            @click="saveSkill(key, skill.id)"
+                            class="btn-primary"
+                        >
                             Save
                         </button>
                         <button
@@ -132,7 +177,7 @@ const setFile = async (ev) => {
                         </button>
                     </div>
                 </div>
-                <div v-else>
+                <div v-if="!skill.isEditing" class="mt-2">
                     <button
                         @click="skills[key].isEditing = true"
                         class="btn-primary"
@@ -140,10 +185,8 @@ const setFile = async (ev) => {
                         Edit
                     </button>
                 </div>
-                <p>{{ skill.name }}</p>
             </div>
         </div>
-
         <button @click="addSkill" class="btn-primary mt-8">Add skill +</button>
     </div>
 </template>

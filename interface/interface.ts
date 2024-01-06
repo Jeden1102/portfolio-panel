@@ -14,5 +14,12 @@ export interface GroupSkillInterface {
     description?: string;
     rating?: string;
     file?: string;
-    isEditing: boolean;
+    isEditing?: boolean;
+}
+
+export interface FileInterface {
+    file?: File|null;
+    uri: string;
+    id: number;
+    isFromDb: boolean;
 }

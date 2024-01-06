@@ -6,9 +6,14 @@ const fields = [
         label: "Nazwa",
     },
     {
-        tableKey: "rating",
+        tableKey: "uri_github",
         fieldType: "text",
-        label: "Ocena",
+        label: "Link github",
+    },
+    {
+        tableKey: "uri_live",
+        fieldType: "text",
+        label: "Link live",
     },
     {
         tableKey: "description",
@@ -25,7 +30,7 @@ const fields = [
 <template>
     <div>
         <div>
-            <SkillInserter tableName="skill" :fields="fields" />
+            <SkillInserter tableName="projects" :fields="fields" />
         </div>
     </div>
 </template>

@@ -44,6 +44,13 @@ const sidebarCollapsed = ref(false);
               />
               <span>Umiejętność</span>
             </NuxtLink>
+            <NuxtLink class="menu-link" to="/projects">
+              <Icon
+                size="24px"
+                name="material-symbols:code-blocks-outline"
+              />
+              <span>Projekty</span>
+            </NuxtLink>
           </n-collapse-item>
         </n-collapse>
       </n-collapse-item>
