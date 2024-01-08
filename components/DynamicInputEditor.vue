@@ -42,7 +42,6 @@ const getDbValues = async () => {
 
     if (data) {
         data.forEach((skill) => {
-            console.log(skill, props.tableKey)
             values.push({
                 key: skill[props.tableKey],
                 value: skill[props.tableValue],

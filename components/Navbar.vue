@@ -5,7 +5,6 @@ const logoutVisible = ref(false);
 
 const { auth } = useSupabaseClient()
 
-
 const logOut = async () => {
   auth.signOut()
   logoutVisible.value = false;
@@ -60,7 +59,3 @@ const logOut = async () => {
         </div>
     </div>
 </template>
-
-
-
-<style scoped></style>

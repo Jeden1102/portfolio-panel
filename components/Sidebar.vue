@@ -85,7 +85,6 @@ const sidebarCollapsed = ref(false);
 .translate-unset {
   transform: unset !important;
 }
-
 .menu-link {
   @apply flex gap-4 items-center my-2 px-4 py-2 rounded-sm;
 
