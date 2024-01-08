@@ -25,6 +25,11 @@ const fields = [
         fieldType: "file",
         label: "Ikona",
     },
+    {
+        tableKey: "skill",
+        fieldType: "relation",
+        label: "Skills",
+    },
 ];
 </script>
 <template>

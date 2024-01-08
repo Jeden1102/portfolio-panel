@@ -14,6 +14,9 @@ const supabase = createClient(
 const skills = ref<Array<GroupSkillInterface>>([]);
 const files = ref<Array<FileInterface>>([]);
 
+const relations = ref({});
+
+
 const getDbValues = async () => {
     const values: GroupSkillInterface[] = [];
     const _files: FileInterface[] = [];
@@ -21,6 +24,7 @@ const getDbValues = async () => {
 
     if (data) {
         data.forEach((skill) => {
+
             values.push({
                 ...skill,
                 isEditing: false,
@@ -36,8 +40,19 @@ const getDbValues = async () => {
         files.value = _files;
     }
 };
+
+const getRelationsValues = async () => {
+    props.fields.forEach(async field => {
+        if (field.fieldType === 'relation') {
+            const { data, error } = await supabase.from(field.tableKey).select();
+            relations.value[field.tableKey] = data;
+        }
+    })
+}
+
 onMounted(() => {
     getDbValues();
+    getRelationsValues();
 });
 
 const addSkill = () => {
@@ -54,6 +69,7 @@ const removeSkill = async (key: number, id: number) => {
 const saveSkill = async (key: number, id: number) => {
     skills.value[key].isEditing = false;
     const skill = skills.value.filter((skill) => skill.id === id)[0];
+
     if (!skill) return;
     delete skill.isEditing;
     const { data, error } = await supabase
@@ -61,10 +77,10 @@ const saveSkill = async (key: number, id: number) => {
         .upsert({ ...skill })
         .select();
     if (!data) return;
-    saveFillToDb(id);
+    saveFileToDb(id);
 };
 
-const saveFillToDb = async (id: number) => {
+const saveFileToDb = async (id: number) => {
     const file = files.value.filter((file) => file.id === id)[0];
     if (!file || !file.file) return;
     const { data, error } = await supabase.storage
@@ -136,6 +152,13 @@ const getFileUri = (id: number) => {
                                     class="absolute transition-all left-0 top-0 w-full h-full bg-red-300 bg-opacity-50 border border-red-500 text-red-700 text-3xl hidden group-hover:block">
                                     <Icon name="ic:baseline-delete" />
                                 </button>
+                            </div>
+                        </div>
+                        <div v-if="field.fieldType === 'relation'">
+                            <div class="flex gap-2" v-for="item in relations[field.tableKey]" :key="item.id">
+                                <input v-model="skill[field.tableKey]" type="checkbox" name=""
+                                    :id="`item-${skill.id}-${item.id}`" :value="item.id">
+                                <label :for="`item-${skill.id}-${item.id}`" >{{ item.name }}</label>
                             </div>
                         </div>
                     </div>

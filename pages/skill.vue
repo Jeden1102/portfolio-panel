@@ -20,6 +20,7 @@ const fields = [
         fieldType: "file",
         label: "Ikona",
     },
+
 ];
 </script>
 <template>
