@@ -44,11 +44,15 @@ const sidebarCollapsed = ref(false);
               />
               <span>Umiejętność</span>
             </NuxtLink>
-            <NuxtLink class="menu-link" to="/projects">
+            <NuxtLink class="menu-link" to="/project-feature">
               <Icon
                 size="24px"
-                name="material-symbols:code-blocks-outline"
+                name="streamline:interface-file-clipboard-check-checkmark-edit-task-edition-checklist-check-success-clipboard-form"
               />
+              <span>Cecha projektu</span>
+            </NuxtLink>
+            <NuxtLink class="menu-link" to="/projects">
+              <Icon size="24px" name="material-symbols:code-blocks-outline" />
               <span>Projekty</span>
             </NuxtLink>
           </n-collapse-item>
