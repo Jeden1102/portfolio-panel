@@ -55,6 +55,10 @@ const sidebarCollapsed = ref(false);
               <Icon size="24px" name="material-symbols:code-blocks-outline" />
               <span>Projekty</span>
             </NuxtLink>
+            <NuxtLink class="menu-link" to="/timeline">
+              <Icon size="24px" name="material-symbols:code-blocks-outline" />
+              <span>Os czasu</span>
+            </NuxtLink>
           </n-collapse-item>
         </n-collapse>
       </n-collapse-item>

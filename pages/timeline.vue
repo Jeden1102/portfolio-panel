@@ -1,14 +1,9 @@
 <script setup>
 const fields = [
   {
-    tableKey: "name",
+    tableKey: "title",
     fieldType: "text",
     label: "Nazwa",
-  },
-  {
-    tableKey: "rating",
-    fieldType: "text",
-    label: "Ocena",
   },
   {
     tableKey: "description",
@@ -16,26 +11,31 @@ const fields = [
     label: "Opis",
   },
   {
+    tableKey: "title_en",
+    fieldType: "text",
+    label: "Nazwa EN",
+  },
+  {
     tableKey: "description_en",
     fieldType: "text",
     label: "Opis EN",
   },
   {
-    tableKey: "file",
-    fieldType: "file",
+    tableKey: "icon",
+    fieldType: "text",
     label: "Ikona",
   },
   {
-    tableKey: "is_main",
-    fieldType: "boolean",
-    label: "Jest glownym",
+    tableKey: "date",
+    fieldType: "date",
+    label: "Data",
   },
 ];
 </script>
 <template>
   <div>
     <div>
-      <SkillInserter tableName="skill" :fields="fields" />
+      <SkillInserter tableName="timeline" :fields="fields" />
     </div>
   </div>
 </template>

@@ -72,6 +72,10 @@ const saveSkill = async (key: number, id: number) => {
 
   if (!skill) return;
   delete skill.isEditing;
+  if (props.tableName !== "skill") {
+    delete skill.project_feature;
+    delete skill.skill;
+  }
   const { data, error } = await supabase
     .from(props.tableName)
     .upsert({ ...skill })
@@ -149,6 +153,20 @@ const getFileUri = (id: number) => {
               v-model="skill[field.tableKey]"
               :disabled="!skill.isEditing"
             ></textarea>
+            <div v-if="field.fieldType === 'boolean'">
+              <input
+                :disabled="!skill.isEditing"
+                type="checkbox"
+                v-model="skill[field.tableKey]"
+              />
+            </div>
+            <div v-if="field.fieldType === 'date'">
+              <input
+                :disabled="!skill.isEditing"
+                type="date"
+                v-model="skill[field.tableKey]"
+              />
+            </div>
             <div v-if="field.fieldType === 'file'">
               <input
                 @change="setFile($event, skill.id)"
