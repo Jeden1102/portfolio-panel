@@ -1,4 +1,9 @@
 <template>
-  <dynamic-input-editor label="Umiejetnosci miekkie" tableKey="skill" tableValue="skill_en" tableName="soft_skills"
-    keyPlaceholder="Communicative" valuePlaceholder="Komunikatywny" />
+  <dynamic-input-editor
+    label="Umiejetnosci miekkie"
+    :tableColumns="['skill', 'skill_en', 'skill_icon']"
+    tableName="soft_skills"
+    keyPlaceholder="Communicative"
+    valuePlaceholder="Komunikatywny"
+  />
 </template>
