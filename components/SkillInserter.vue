@@ -23,6 +23,9 @@ const getDbValues = async () => {
 
   if (data) {
     data.forEach((skill) => {
+      if (skill.skills_group) {
+        skill.skills_group = [skill.skills_group];
+      }
       values.push({
         ...skill,
         isEditing: false,
@@ -72,14 +75,20 @@ const saveSkill = async (key: number, id: number) => {
   const skill = skills.value.filter((skill) => skill.id === id)[0];
 
   if (!skill) return;
+
   delete skill.isEditing;
-  if (props.tableName !== "skill") {
+
+  if (props.tableName === "skill") {
     delete skill.project_feature;
     delete skill.skill;
-  }
-
-  if (props.tableName !== "projects") {
-    delete skills.skills_group;
+    skill.skills_group = skill.skills_group[0];
+  } else if (props.tableName === "projects") {
+    delete skill.skill;
+    delete skill.skills_group;
+  } else {
+    delete skill.skills_group;
+    delete skill.project_feature;
+    delete skill.skill;
   }
 
   const { data, error } = await supabase
