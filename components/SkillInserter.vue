@@ -58,6 +58,7 @@ const addSkill = () => {
     isEditing: true,
     id: Date.now(),
     project_feature: [],
+    skills_group: [],
     skill: [],
   });
 };
@@ -76,6 +77,11 @@ const saveSkill = async (key: number, id: number) => {
     delete skill.project_feature;
     delete skill.skill;
   }
+
+  if (props.tableName !== "projects") {
+    delete skills.skills_group;
+  }
+
   const { data, error } = await supabase
     .from(props.tableName)
     .upsert({ ...skill })

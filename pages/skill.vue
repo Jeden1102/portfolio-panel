@@ -30,6 +30,12 @@ const fields = [
     fieldType: "boolean",
     label: "Jest glownym",
   },
+  {
+    tableKey: "skills_group",
+    fieldType: "relation",
+    fieldLabel: "skill",
+    label: "Grupa umiejetnosci",
+  },
 ];
 </script>
 <template>
