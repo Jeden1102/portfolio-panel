@@ -21,8 +21,8 @@ const fields = [
     label: "Opis EN",
   },
   {
-    tableKey: "file",
-    fieldType: "file",
+    tableKey: "icon_name",
+    fieldType: "text",
     label: "Ikona",
   },
   {
