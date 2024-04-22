@@ -6,5 +6,6 @@
     tableName="project_feature"
     keyPlaceholder="Rozbudowany panel"
     valuePlaceholder="Extended panel"
+    :tableColumns="['project_feature_en', 'project_feature']"
   />
 </template>
