@@ -83,7 +83,6 @@ const saveSkill = async (key: number, id: number) => {
     delete skill.skill;
     skill.skills_group = skill.skills_group[0];
   } else if (props.tableName === "projects") {
-    delete skill.skill;
     delete skill.skills_group;
   } else {
     delete skill.skills_group;
